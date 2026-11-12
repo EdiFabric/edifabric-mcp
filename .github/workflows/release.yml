@@ -97,7 +97,8 @@ jobs:
           # Leave NPM_TOKEN unset once trusted publishing is configured for @edifabric/mcp on npmjs.com.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          tarball=$(ls dist/*.tgz)
+          # ./ keeps npm from reading dist/<name>.tgz as a GitHub owner/repo shorthand.
+          tarball=$(ls ./dist/*.tgz)
           id=$(tar -xOzf "$tarball" package/package.json | node -p "const p = JSON.parse(require('fs').readFileSync(0, 'utf8')); p.name + '@' + p.version")
           args=(--access public --provenance)
           [ "$DRY_RUN" = "true" ] && args+=(--dry-run)
