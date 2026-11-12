@@ -187,7 +187,8 @@ describe('describe_spec', () => {
         const result = await call(client, 'describe_spec', { transaction: '837P', version: '005010X222A1', segment: 'BHT' });
 
         assert.equal(result.segment, 'BHT');
-        assert.equal(result.name, 'BHT_BeginningOfHierarchicalTransaction');
+        assert.equal(result.property, 'BHT_BeginningOfHierarchicalTransaction');
+        assert.notEqual(result.name, result.property, 'the transaction\'s name isn\'t replaced');
         assert.deepEqual(result.elements[0].codes, ['0019']);
     });
 

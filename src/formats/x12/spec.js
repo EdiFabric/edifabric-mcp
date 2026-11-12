@@ -148,7 +148,8 @@ export function segmentDetail(model, query, name) {
     const segment = model.Segments[String(found.term.Id)];
     const detail = {
         segment: segment.Tag,
-        name: found.term.D,
+        // Not "name", which is the transaction's name in the same answer.
+        property: found.term.D,
         in_loop: found.path.join(' > ') || null,
         elements: describeElements(model, found.term),
     };

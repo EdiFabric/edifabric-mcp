@@ -24,7 +24,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
     "edifabric-x12": "^1.2.1",
-    "zod": "^3.25.0"
+    "zod": "^4.6.7"
   },
   "keywords": [
     "mcp",

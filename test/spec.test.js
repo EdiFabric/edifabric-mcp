@@ -55,7 +55,7 @@ test('describes a segment\'s elements, codes and syntax rules', () => {
 });
 
 test('finds a segment by its ID when only one segment has it', () => {
-    assert.equal(segmentDetail(model, query, 'BHT').name, 'BHT_BeginningOfHierarchicalTransaction');
+    assert.equal(segmentDetail(model, query, 'BHT').property, 'BHT_BeginningOfHierarchicalTransaction');
     assert.throws(() => segmentDetail(model, query, 'NM1'), /several NM1 segments: NM1_SubmitterName, NM1_ReceiverName/);
     assert.throws(() => segmentDetail(model, query, 'XYZ'), /No segment named XYZ/);
 });

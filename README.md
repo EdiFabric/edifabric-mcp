@@ -145,7 +145,7 @@ npm install
 npm test
 ```
 
-The tests use the sample model in `test/fixtures` and need a serial with quota left. Put `EDIFABRIC_SERIAL=YOUR_SERIAL` in a `.env.local` file, which git ignores, or set the variable. They need ediFabric Native 120 or later: set `EDIFABRIC_LIBRARY` if the installed package has an older one. Set `EDIFABRIC_ONLINE_TESTS=1` to include the tests that download models online. To try the server interactively, run `npm run inspect`.
+The tests need Node.js 22.9 or later, for `--env-file-if-exists`. They use the sample model in `test/fixtures` and need a serial with quota left. Put `EDIFABRIC_SERIAL=YOUR_SERIAL` in a `.env.local` file, which git ignores, or set the variable. They need ediFabric Native 120 or later: set `EDIFABRIC_LIBRARY` if the installed package has an older one. Set `EDIFABRIC_ONLINE_TESTS=1` to include the tests that download models online. To try the server interactively, run `npm run inspect`.
 
 ### Adding a format
 
