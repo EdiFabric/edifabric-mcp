@@ -8,4 +8,4 @@ First public release, on npm as `@edifabric/mcp`, in the MCP Registry as `com.ed
 
 - Tools: `parse_edi`, `validate_edi`, `acknowledge_edi`, `build_edi`, `split_edi`, `describe_spec` and `get_status`, for X12 and HIPAA.
 - `describe_spec` reads the same model as parsing: a local or custom model from `EDIFABRIC_MAP`, otherwise the standard model downloaded with the serial. It returns an outline, one segment's elements, codes and syntax rules, or a JSON skeleton for `build_edi`.
-- Uses ediFabric Native 1.2.1 through the `edifabric-x12` package.
+- Uses ediFabric Native 1.2.2 through the `edifabric-x12` package, which also runs under Node.js on Linux.

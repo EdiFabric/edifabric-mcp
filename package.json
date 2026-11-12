@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
-    "edifabric-x12": "^1.2.1",
+    "edifabric-x12": "^1.2.2",
     "zod": "^4.6.7"
   },
   "keywords": [
