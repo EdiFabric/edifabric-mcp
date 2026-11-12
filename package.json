@@ -1,6 +1,6 @@
 {
   "name": "@edifabric/mcp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MCP server for EDI, currently X12 and HIPAA: convert EDI to JSON and back, validate, and generate 997 and 999 acknowledgments, locally with ediFabric Native.",
   "mcpName": "com.edifabric/edifabric-mcp",
   "type": "module",

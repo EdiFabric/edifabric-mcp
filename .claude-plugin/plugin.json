@@ -1,7 +1,7 @@
 {
   "name": "edifabric",
   "displayName": "ediFabric EDI",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
   "author": {
     "name": "EdiFabric",
@@ -11,14 +11,26 @@
   "homepage": "https://www.edifabric.com/docs/edifabric-native/introduction.html",
   "repository": "https://github.com/EdiFabric/edifabric-mcp",
   "license": "MIT",
-  "keywords": ["edi", "x12", "hipaa", "837", "835", "850", "999", "997", "mcp"],
+  "keywords": [
+    "edi",
+    "x12",
+    "hipaa",
+    "837",
+    "835",
+    "850",
+    "999",
+    "997",
+    "mcp"
+  ],
   "supportUrl": "https://support.edifabric.com/hc/en-us/requests/new",
   "termsOfServiceUrl": "https://www.edifabric.com/files/eula.pdf",
   "privacyPolicyUrl": "https://www.edifabric.com/files/privacypolicy.pdf",
   "mcpServers": {
     "edifabric": {
       "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/src/index.js"],
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/src/index.js"
+      ],
       "env": {
         "EDIFABRIC_SERIAL": "${user_config.serial}",
         "EDIFABRIC_ALLOWED_DIRS": "${user_config.allowed_folder}"

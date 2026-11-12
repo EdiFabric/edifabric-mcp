@@ -8,12 +8,12 @@
     "source": "github"
   },
   "websiteUrl": "https://www.edifabric.com/docs/edifabric-native/introduction.html",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@edifabric/mcp",
-      "version": "0.1.0",
+      "version": "1.0.0",
       "transport": {
         "type": "stdio"
       },

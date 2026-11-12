@@ -24,25 +24,73 @@ Every published version is final: npm and the MCP Registry refuse to publish the
 
 ## One-time setup
 
-1. **GitHub repository**: make `EdiFabric/edifabric-mcp` public.
-2. **npm**: `@edifabric/mcp` is published under the `edifabric` npm organization, like the bindings. Until the first publish, the workflow uses the `NPM_TOKEN` secret. After it, configure [trusted publishing](https://docs.npmjs.com/trusted-publishers) for `@edifabric/mcp` (repository `EdiFabric/edifabric-mcp`, workflow `release.yml`, environment `npm`) and delete the token.
-3. **MCP Registry key**: the name `com.edifabric/...` is proven with a DNS record on edifabric.com.
+### 1. GitHub repository
+
+- **Push access.** Push as an account with write access to `EdiFabric/edifabric-mcp`. A credential for another account makes git report "Repository not found".
+- **Visibility:** Settings, General, Danger Zone, **Change visibility**, Public. npm only adds provenance for packages built from a public repository, so do this before the first release. Check the history first for anything that shouldn't be public; `.env.local` is ignored by git.
+- **Actions:** Settings, Actions, General. Allow GitHub's actions and `sigstore/cosign-installer`, and keep **Workflow permissions** at read-only; the workflows ask for more where they need it.
+- **Branch protection:** Settings, Rules, Rulesets, a ruleset for `main`. Block force pushes and deletion, and require the **CI** checks. The Claude Code plugin installs from `main`, so `main` must always be releasable.
+- **Tag protection:** a second ruleset for tags matching `v*`. Only you may create or update them.
+
+### 2. npm
+
+`@edifabric/mcp` is published under the `edifabric` npm organization, like the `edifabric-x12` platform packages.
+
+1. **Organization:** check that your npm account is an owner of the `edifabric` organization, under Organizations, edifabric, Members.
+2. **Token for the first publish.** Trusted publishing can only be configured on a package that exists, so the first publish uses a token. On npmjs.com: your avatar, **Access Tokens**, **Generate New Token**, **Granular Access Token**:
+   - Permissions: **Read and write**, for packages and scopes, scope `@edifabric`.
+   - Expiration: 7 days.
+   - Allow it to bypass two-factor authentication, or publishing from CI fails.
+3. **Store the token** as the `NPM_TOKEN` secret of the `npm` environment (step 4).
+4. **After the first release**, switch to trusted publishing:
+   - On npmjs.com, open `@edifabric/mcp`, **Settings**, **Trusted Publisher**, **GitHub Actions**.
+   - Organization `EdiFabric`, repository `edifabric-mcp`, workflow `release.yml`, environment `npm`.
+   - In the same settings, under **Publishing access**, require two-factor authentication and disallow tokens.
+   - Delete the `NPM_TOKEN` secret and revoke the token.
+
+### 3. MCP Registry key
+
+The registry name `com.edifabric/edifabric-mcp` is proven by a DNS record on edifabric.com, signed with a key only the release workflow has.
+
+1. **Generate the key** in Git Bash. Its OpenSSL 1.1.1 supports Ed25519. Use a folder outside any repository:
    ```bash
    openssl genpkey -algorithm Ed25519 -out mcp-registry-key.pem
    echo "v=MCPv1; k=ed25519; p=$(openssl pkey -in mcp-registry-key.pem -pubout -outform DER | tail -c 32 | base64)"
    openssl pkey -in mcp-registry-key.pem -noout -text | grep -A3 "priv:" | tail -n +2 | tr -d ' :\n'
    ```
-   Add the first output as a **TXT record on `edifabric.com` itself** (the apex, not a subdomain). Store the second output, the private key in hex, as the `MCP_PRIVATE_KEY` secret. Keep the `.pem` file offline, or delete it.
-4. **GitHub environments** (Settings, Environments):
-   - `npm`: secret `NPM_TOKEN` until trusted publishing is on.
-   - `mcp-registry`: secret `MCP_PRIVATE_KEY`.
-   For both, allow only `v*` tags and add yourself as a required reviewer, so every publish waits for your approval.
-5. **Repository secret** `EDIFABRIC_SERIAL`: a serial with quota for the tests. Without it they use the demo serial.
+   The second command prints the DNS record, `v=MCPv1; k=ed25519; p=<44 characters>`. The third prints the private key as 64 hex characters.
+2. **Add the DNS record** where edifabric.com's DNS is managed:
+   - Type **TXT**, name **`@`** (edifabric.com itself, not `www` or another subdomain), value the whole `v=MCPv1; ...` line.
+   - Add it as a new record. Leave the existing TXT records, such as Stripe's, as they are.
+3. **Check it has propagated**, which can take minutes to hours:
+   ```bash
+   nslookup -type=TXT edifabric.com 8.8.8.8
+   ```
+4. **Store the private key** (the 64 hex characters) as the `MCP_PRIVATE_KEY` secret of the `mcp-registry` environment (step 4).
+5. **Keep the `.pem` file** in your password manager, and delete it from disk. To rotate the key, repeat these steps and remove the old TXT record: the registry fails on a stale one.
+
+### 4. GitHub environments
+
+In the repository, Settings, **Environments**, **New environment**, create:
+
+- **`npm`**, with secret `NPM_TOKEN` (until trusted publishing is on).
+- **`mcp-registry`**, with secret `MCP_PRIVATE_KEY`.
+
+For each one:
+- Under **Deployment branches and tags**, choose **Selected branches and tags** and add the tag rule `v*`.
+- Under **Required reviewers**, add yourself. Every publish then waits for your approval in the workflow run.
+
+Secrets stored on an environment are only given to jobs that name it, which is what keeps the keys away from pull requests.
+
+### 5. Test serial
+
+Repository secret `EDIFABRIC_SERIAL`: a serial with quota, for the tests in CI. Settings, Secrets and variables, Actions, **New repository secret**. Without it, the tests use the demo serial and may run into its limits.
 
 ## Releasing a version
 
 1. Update `CHANGELOG.md` with a `## <x.y.z>` entry, and commit it.
 2. Run `npm version <x.y.z>`. It updates the version files, commits, and tags `v<x.y.z>`.
+   If you set the version another way, run `npm run sync-version`, commit, and tag `v<x.y.z>` yourself.
 3. Push: `git push --follow-tags`.
 4. Create a GitHub release from the tag, with the changelog entry as its notes.
 5. Approve the `npm` and `mcp-registry` deployments when the **Release** workflow asks.

@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "edifabric-mcp",
   "display_name": "ediFabric EDI",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
   "long_description": "Lets Claude work with X12 and HIPAA EDI files on your computer: validate them up to HIPAA SNIP level 4 and explain each error, convert EDI to JSON and back, generate 999 and 997 acknowledgments, split files into transactions, and describe any transaction's structure. Files stay on your computer; only the license check and the transaction type and version of the models leave it.",
   "author": {
@@ -22,7 +22,9 @@
     "entry_point": "src/index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/src/index.js"],
+      "args": [
+        "${__dirname}/src/index.js"
+      ],
       "env": {
         "EDIFABRIC_SERIAL": "${user_config.serial}",
         "EDIFABRIC_ALLOWED_DIRS": "${user_config.allowed_folder}"
@@ -30,19 +32,55 @@
     }
   },
   "tools": [
-    { "name": "parse_edi", "description": "Convert an EDI file to JSON" },
-    { "name": "validate_edi", "description": "Validate an EDI file up to HIPAA SNIP level 4" },
-    { "name": "acknowledge_edi", "description": "Generate a 999 or 997 acknowledgment" },
-    { "name": "build_edi", "description": "Convert EDI JSON to an EDI file" },
-    { "name": "split_edi", "description": "Split an EDI file into one file per transaction" },
-    { "name": "describe_spec", "description": "Describe a transaction's structure, or make a JSON skeleton to fill in" },
-    { "name": "get_status", "description": "Show the license, the models and the allowed folders" }
+    {
+      "name": "parse_edi",
+      "description": "Convert an EDI file to JSON"
+    },
+    {
+      "name": "validate_edi",
+      "description": "Validate an EDI file up to HIPAA SNIP level 4"
+    },
+    {
+      "name": "acknowledge_edi",
+      "description": "Generate a 999 or 997 acknowledgment"
+    },
+    {
+      "name": "build_edi",
+      "description": "Convert EDI JSON to an EDI file"
+    },
+    {
+      "name": "split_edi",
+      "description": "Split an EDI file into one file per transaction"
+    },
+    {
+      "name": "describe_spec",
+      "description": "Describe a transaction's structure, or make a JSON skeleton to fill in"
+    },
+    {
+      "name": "get_status",
+      "description": "Show the license, the models and the allowed folders"
+    }
   ],
-  "keywords": ["edi", "x12", "hipaa", "837", "835", "850", "999", "997"],
+  "keywords": [
+    "edi",
+    "x12",
+    "hipaa",
+    "837",
+    "835",
+    "850",
+    "999",
+    "997"
+  ],
   "license": "MIT",
-  "privacy_policies": ["https://www.edifabric.com/files/privacypolicy.pdf"],
+  "privacy_policies": [
+    "https://www.edifabric.com/files/privacypolicy.pdf"
+  ],
   "compatibility": {
-    "platforms": ["darwin", "win32", "linux"],
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
     "runtimes": {
       "node": ">=18.0.0"
     }
