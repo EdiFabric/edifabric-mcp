@@ -1,0 +1,56 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.edifabric/edifabric-mcp",
+  "title": "ediFabric EDI",
+  "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
+  "repository": {
+    "url": "https://github.com/EdiFabric/edifabric-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://www.edifabric.com/docs/edifabric-native/introduction.html",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@edifabric/mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "EDIFABRIC_SERIAL",
+          "description": "Your ediFabric serial key. Without it, the server uses the demo serial, which has a small daily quota.",
+          "isRequired": false,
+          "isSecret": true,
+          "format": "string"
+        },
+        {
+          "name": "EDIFABRIC_ALLOWED_DIRS",
+          "description": "Folders the tools may read and write, separated by ; on Windows and : elsewhere. Defaults to the client's roots or the home folder.",
+          "isRequired": false,
+          "format": "string"
+        },
+        {
+          "name": "EDIFABRIC_MAP",
+          "description": "Path to a map.json with local or custom models.",
+          "isRequired": false,
+          "format": "filepath"
+        },
+        {
+          "name": "EDIFABRIC_OFFLINE",
+          "description": "Set to true to use only the models in EDIFABRIC_MAP.",
+          "isRequired": false,
+          "format": "boolean"
+        },
+        {
+          "name": "EDIFABRIC_TOKEN",
+          "description": "A token issued for you, for machines without internet access.",
+          "isRequired": false,
+          "isSecret": true,
+          "format": "string"
+        }
+      ]
+    }
+  ]
+}

@@ -31,15 +31,32 @@ You need [Node.js](https://nodejs.org) 18 or later. The server runs on Windows x
 
 Without `EDIFABRIC_SERIAL`, the server uses the free demo serial, which has a small daily quota and isn't for production. Use your own serial from [Your account](https://www.edifabric.com/docs/getting-started/your-account.html).
 
+[![Add to Cursor](https://img.shields.io/badge/Add_to-Cursor-000000?logo=cursor)](https://cursor.com/en/install-mcp?name=edifabric&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBlZGlmYWJyaWMvbWNwIl19)
+[![Install in VS Code](https://img.shields.io/badge/Install_in-VS_Code-0098FF?logo=visualstudiocode)](https://insiders.vscode.dev/redirect/mcp/install?name=edifabric&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40edifabric/mcp%22%5D%7D)
+[![Claude Desktop bundle](https://img.shields.io/badge/Claude_Desktop-.mcpb-D97757?logo=claude)](https://github.com/EdiFabric/edifabric-mcp/releases/latest)
+
 ### Claude Code
+
+Install it as a plugin, which asks for your serial and keeps it in your system's credential store:
+
+```
+/plugin marketplace add EdiFabric/edifabric-mcp
+/plugin install edifabric@edifabric
+```
+
+Or add the server on its own:
 
 ```bash
 claude mcp add edifabric -e EDIFABRIC_SERIAL=YOUR_SERIAL -- npx -y @edifabric/mcp
 ```
 
+On Windows, outside WSL, run `npx` through `cmd`: `claude mcp add edifabric -e EDIFABRIC_SERIAL=YOUR_SERIAL -- cmd /c npx -y @edifabric/mcp`.
+
 ### Claude Desktop
 
-Add this to `claude_desktop_config.json`, under **Settings**, **Developer**, **Edit Config**:
+Download `edifabric-mcp-<version>.mcpb` from the [latest release](https://github.com/EdiFabric/edifabric-mcp/releases/latest) and open it. Claude Desktop installs it and asks for your serial and your EDI folder. The bundle includes everything, so you don't need Node.js.
+
+Or add this to `claude_desktop_config.json`, under **Settings**, **Developer**, **Edit Config**:
 
 ```json
 {
@@ -88,6 +105,21 @@ Add this to `.vscode/mcp.json`:
   }
 }
 ```
+
+### OpenAI Codex
+
+Add this to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.edifabric]
+command = "npx"
+args = ["-y", "@edifabric/mcp"]
+env = { EDIFABRIC_SERIAL = "YOUR_SERIAL" }
+```
+
+### Gemini CLI, Windsurf and others
+
+Gemini CLI (`~/.gemini/settings.json`), Windsurf (`~/.codeium/windsurf/mcp_config.json`), Cline, and most other clients take the same `mcpServers` entry as Claude Desktop.
 
 Other MCP clients use the same command, `npx -y @edifabric/mcp`, and the same environment variables.
 

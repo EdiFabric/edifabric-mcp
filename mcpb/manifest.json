@@ -1,0 +1,67 @@
+{
+  "manifest_version": "0.3",
+  "name": "edifabric-mcp",
+  "display_name": "ediFabric EDI",
+  "version": "0.1.0",
+  "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
+  "long_description": "Lets Claude work with X12 and HIPAA EDI files on your computer: validate them up to HIPAA SNIP level 4 and explain each error, convert EDI to JSON and back, generate 999 and 997 acknowledgments, split files into transactions, and describe any transaction's structure. Files stay on your computer; only the license check and the transaction type and version of the models leave it.",
+  "author": {
+    "name": "EdiFabric",
+    "email": "support@edifabric.com",
+    "url": "https://www.edifabric.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EdiFabric/edifabric-mcp.git"
+  },
+  "homepage": "https://www.edifabric.com/docs/edifabric-native/introduction.html",
+  "documentation": "https://github.com/EdiFabric/edifabric-mcp#readme",
+  "support": "https://support.edifabric.com/hc/en-us/requests/new",
+  "server": {
+    "type": "node",
+    "entry_point": "src/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/src/index.js"],
+      "env": {
+        "EDIFABRIC_SERIAL": "${user_config.serial}",
+        "EDIFABRIC_ALLOWED_DIRS": "${user_config.allowed_folder}"
+      }
+    }
+  },
+  "tools": [
+    { "name": "parse_edi", "description": "Convert an EDI file to JSON" },
+    { "name": "validate_edi", "description": "Validate an EDI file up to HIPAA SNIP level 4" },
+    { "name": "acknowledge_edi", "description": "Generate a 999 or 997 acknowledgment" },
+    { "name": "build_edi", "description": "Convert EDI JSON to an EDI file" },
+    { "name": "split_edi", "description": "Split an EDI file into one file per transaction" },
+    { "name": "describe_spec", "description": "Describe a transaction's structure, or make a JSON skeleton to fill in" },
+    { "name": "get_status", "description": "Show the license, the models and the allowed folders" }
+  ],
+  "keywords": ["edi", "x12", "hipaa", "837", "835", "850", "999", "997"],
+  "license": "MIT",
+  "privacy_policies": ["https://www.edifabric.com/files/privacypolicy.pdf"],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  },
+  "user_config": {
+    "serial": {
+      "type": "string",
+      "title": "ediFabric serial key",
+      "description": "Your serial from https://www.edifabric.com/account.html. Leave it empty to try the server with the demo serial, which has a small daily quota.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "allowed_folder": {
+      "type": "directory",
+      "title": "EDI folder",
+      "description": "The folder the tools may read and write.",
+      "required": true,
+      "default": "${DOCUMENTS}"
+    }
+  }
+}

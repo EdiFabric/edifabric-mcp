@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-latest]
+        node: [22]
+        include:
+          - os: ubuntu-latest
+            node: 24
+            # One job also downloads models online, with the serial from the secret when there is one.
+            online: true
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: node scripts/check-release.mjs
+      - run: npm test
+        env:
+          # Pull requests from forks get no secrets, so the tests fall back to the demo serial.
+          EDIFABRIC_SERIAL: ${{ secrets.EDIFABRIC_SERIAL }}
+          EDIFABRIC_ONLINE_TESTS: ${{ matrix.online && '1' || '' }}
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check what npm would publish
+        run: npm pack --dry-run
+      - name: Build the Claude Desktop bundle
+        run: node scripts/build-mcpb.mjs
+      - name: Validate the Claude Code plugin and marketplace
+        run: |
+          npx --yes @anthropic-ai/claude-code plugin validate .
+          npx --yes @anthropic-ai/claude-code plugin validate .claude-plugin/marketplace.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mcpb
+          path: dist/*.mcpb
+          if-no-files-found: error

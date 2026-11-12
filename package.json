@@ -16,7 +16,11 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "node --env-file-if-exists=.env.local --test \"test/*.test.js\"",
-    "inspect": "npx @modelcontextprotocol/inspector node --env-file-if-exists=.env.local src/index.js"
+    "inspect": "npx @modelcontextprotocol/inspector node --env-file-if-exists=.env.local src/index.js",
+    "sync-version": "node scripts/sync-version.mjs",
+    "version": "node scripts/sync-version.mjs && git add server.json .claude-plugin/plugin.json mcpb/manifest.json",
+    "check-release": "node scripts/check-release.mjs",
+    "build:mcpb": "node scripts/build-mcpb.mjs"
   },
   "engines": {
     "node": ">=18"
@@ -42,6 +46,7 @@
   "license": "MIT",
   "author": "EdiFabric <support@edifabric.com>",
   "homepage": "https://www.edifabric.com/docs/edifabric-native/introduction.html",
+  "bugs": "https://github.com/EdiFabric/edifabric-mcp/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EdiFabric/edifabric-mcp.git"

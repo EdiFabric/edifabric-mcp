@@ -1,0 +1,167 @@
+name: Release
+
+# Publishing a GitHub release tagged v<version> publishes that version everywhere:
+#   1. npm: @edifabric/mcp, with provenance
+#   2. the Claude Desktop bundle (.mcpb), attached to the GitHub release
+#   3. the official MCP Registry, as com.edifabric/edifabric-mcp
+# The Claude Code plugin needs no step: it installs from the default branch at the version in plugin.json.
+# Run it by hand to validate everything without publishing. See RELEASING.md.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Validate without publishing
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+env:
+  DRY_RUN: ${{ github.event_name != 'release' && inputs.dry-run }}
+  # Pinned deliberately; see https://github.com/modelcontextprotocol/registry/releases before changing it.
+  MCP_PUBLISHER_VERSION: v1.8.1
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check the versions, tag, names and changelog agree
+        run: node scripts/check-release.mjs ${{ github.event_name == 'release' && format('--tag {0}', github.ref_name) || '' }}
+
+  test:
+    needs: check
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+        env:
+          EDIFABRIC_SERIAL: ${{ secrets.EDIFABRIC_SERIAL }}
+          EDIFABRIC_ONLINE_TESTS: '1'
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Pack the npm package
+        run: mkdir -p dist && npm pack --pack-destination dist
+      - name: Build the Claude Desktop bundle
+        run: node scripts/build-mcpb.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: dist/
+          if-no-files-found: error
+
+  npm:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or later.
+      - run: npm install -g npm@latest
+      - uses: actions/download-artifact@v4
+        with:
+          name: release
+          path: dist
+      - name: Publish @edifabric/mcp
+        env:
+          # Leave NPM_TOKEN unset once trusted publishing is configured for @edifabric/mcp on npmjs.com.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          tarball=$(ls dist/*.tgz)
+          id=$(tar -xOzf "$tarball" package/package.json | node -p "const p = JSON.parse(require('fs').readFileSync(0, 'utf8')); p.name + '@' + p.version")
+          args=(--access public --provenance)
+          [ "$DRY_RUN" = "true" ] && args+=(--dry-run)
+          # A version already on npm is skipped, so a release that failed partway can be rerun.
+          if [ -n "$(npm view "$id" version 2>/dev/null)" ]; then
+            echo "$id is already published; skipping"
+          else
+            npm publish "$tarball" "${args[@]}"
+          fi
+
+  mcpb:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release
+          path: dist
+      - name: Attach the Claude Desktop bundle to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/*.mcpb --clobber --repo "$GITHUB_REPOSITORY"
+
+  registry:
+    needs: npm
+    runs-on: ubuntu-latest
+    # The environment holds MCP_PRIVATE_KEY, the Ed25519 key whose public half is in edifabric.com's DNS TXT record.
+    environment: mcp-registry
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+      - name: Download and verify mcp-publisher
+        run: |
+          set -euo pipefail
+          archive="mcp-publisher_linux_amd64.tar.gz"
+          base_url="https://github.com/modelcontextprotocol/registry/releases/download/${MCP_PUBLISHER_VERSION}"
+          curl --fail --location --silent --show-error --output "$archive" "$base_url/$archive"
+          curl --fail --location --silent --show-error --output "$archive.sigstore.json" "$base_url/$archive.sigstore.json"
+          cosign verify-blob \
+            --bundle "$archive.sigstore.json" \
+            --certificate-identity "https://github.com/modelcontextprotocol/registry/.github/workflows/release.yml@refs/tags/${MCP_PUBLISHER_VERSION}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            "$archive"
+          tar xzf "$archive" mcp-publisher
+          rm -f "$archive" "$archive.sigstore.json"
+      - name: Wait for npm to serve the new version
+        if: env.DRY_RUN != 'true'
+        run: |
+          id=$(node -p "const p = require('./package.json'); p.name + '@' + p.version")
+          for i in $(seq 1 30); do
+            [ -n "$(npm view "$id" version 2>/dev/null)" ] && exit 0
+            echo "Waiting for $id on npm..."; sleep 10
+          done
+          echo "$id isn't on npm, so the registry would refuse it."; exit 1
+      - name: Log in to the MCP Registry for edifabric.com
+        if: env.DRY_RUN != 'true'
+        run: ./mcp-publisher login dns --domain edifabric.com --private-key "${{ secrets.MCP_PRIVATE_KEY }}"
+      - name: Publish com.edifabric/edifabric-mcp
+        if: env.DRY_RUN != 'true'
+        run: ./mcp-publisher publish

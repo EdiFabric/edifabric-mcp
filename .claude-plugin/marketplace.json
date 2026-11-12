@@ -1,0 +1,18 @@
+{
+  "name": "edifabric",
+  "description": "ediFabric plugins for EDI: X12 and HIPAA validation, conversion and acknowledgments.",
+  "owner": {
+    "name": "EdiFabric",
+    "email": "support@edifabric.com",
+    "url": "https://www.edifabric.com"
+  },
+  "plugins": [
+    {
+      "name": "edifabric",
+      "source": "./",
+      "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
+      "category": "data",
+      "tags": ["edi", "x12", "hipaa", "healthcare", "supply-chain"]
+    }
+  ]
+}
