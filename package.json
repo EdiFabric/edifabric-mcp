@@ -1,0 +1,49 @@
+{
+  "name": "@edifabric/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for EDI, currently X12 and HIPAA: convert EDI to JSON and back, validate, and generate 997 and 999 acknowledgments, locally with ediFabric Native.",
+  "mcpName": "com.edifabric/edifabric-mcp",
+  "type": "module",
+  "bin": {
+    "edifabric-mcp": "src/index.js"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --env-file-if-exists=.env.local --test \"test/*.test.js\"",
+    "inspect": "npx @modelcontextprotocol/inspector node --env-file-if-exists=.env.local src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "edifabric-x12": "^1.2.1",
+    "zod": "^3.25.0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "edi",
+    "x12",
+    "hipaa",
+    "837",
+    "835",
+    "850",
+    "997",
+    "999",
+    "edifabric"
+  ],
+  "license": "MIT",
+  "author": "EdiFabric <support@edifabric.com>",
+  "homepage": "https://www.edifabric.com/docs/edifabric-native/introduction.html",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EdiFabric/edifabric-mcp.git"
+  }
+}
