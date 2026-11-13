@@ -54,7 +54,13 @@ On Windows, outside WSL, run `npx` through `cmd`: `claude mcp add edifabric -e E
 
 ### Claude Desktop
 
-Download `edifabric-mcp-<version>.mcpb` from the [latest release](https://github.com/EdiFabric/edifabric-mcp/releases/latest) and open it. Claude Desktop installs it and asks for your serial and your EDI folder. The bundle includes everything, so you don't need Node.js.
+Download `edifabric-mcp-<version>.mcpb` from the [latest release](https://github.com/EdiFabric/edifabric-mcp/releases/latest), then open it in Claude Desktop in one of these ways:
+
+- double-click the file (installing Claude Desktop registers the `.mcpb` file type);
+- drag the file onto the Claude Desktop window;
+- in Claude Desktop, go to **Settings > Extensions > Advanced settings > Install Extension...** and select the file.
+
+Claude Desktop shows the extension: select **Install**, then enter your serial and your EDI folder. The bundle includes everything, so you don't need Node.js.
 
 Or add this to `claude_desktop_config.json`, under **Settings**, **Developer**, **Edit Config**:
 

@@ -32,8 +32,8 @@
         "${CLAUDE_PLUGIN_ROOT}/src/index.js"
       ],
       "env": {
-        "EDIFABRIC_SERIAL": "${user_config.serial}",
-        "EDIFABRIC_ALLOWED_DIRS": "${user_config.allowed_folder}"
+        "CLAUDE_PLUGIN_OPTION_SERIAL": "${user_config.serial}",
+        "CLAUDE_PLUGIN_OPTION_ALLOWED_FOLDER": "${user_config.allowed_folder}"
       }
     }
   },

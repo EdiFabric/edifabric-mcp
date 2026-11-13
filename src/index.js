@@ -4,6 +4,9 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { DEMO_SERIAL, getEngine } from './native.js';
 import { allFormats } from './formats/index.js';
 import { createServer } from './server.js';
+import { applyPluginOptions } from './settings.js';
+
+applyPluginOptions(process.env);
 
 try {
     // Checks the native library. The license is applied on first use, so a tool can report a problem with it.
