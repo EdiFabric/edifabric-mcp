@@ -1,7 +1,7 @@
 {
   "name": "edifabric",
   "displayName": "ediFabric EDI",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
   "author": {
     "name": "EdiFabric",
