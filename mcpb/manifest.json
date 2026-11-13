@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.3",
   "name": "edifabric-mcp",
-  "display_name": "ediFabric EDI",
+  "display_name": "ediFabric EDI Toolkit",
   "version": "1.0.1",
   "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
   "long_description": "Lets Claude work with X12 and HIPAA EDI files on your computer: validate them up to HIPAA SNIP level 4 and explain each error, convert EDI to JSON and back, generate 999 and 997 acknowledgments, split files into transactions, and describe any transaction's structure. Files stay on your computer; only the license check and the transaction type and version of the models leave it.",

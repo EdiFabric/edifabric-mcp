@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.edifabric/edifabric-mcp",
-  "title": "ediFabric EDI",
+  "title": "ediFabric EDI Toolkit",
   "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native.",
   "repository": {
     "url": "https://github.com/EdiFabric/edifabric-mcp",
