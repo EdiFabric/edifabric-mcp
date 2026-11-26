@@ -60,6 +60,8 @@ fs.mkdirSync(dist, { recursive: true });
 for (const item of ['src', 'package.json', 'package-lock.json', 'README.md', 'LICENSE.md'])
     fs.cpSync(path.join(ROOT, item), path.join(build, item), { recursive: true });
 fs.copyFileSync(path.join(ROOT, 'mcpb', 'manifest.json'), path.join(build, 'manifest.json'));
+// The icon Claude Desktop shows for the extension: the plugin's, named in the manifest's "icon".
+fs.copyFileSync(path.join(ROOT, '.claude-plugin', 'icon.png'), path.join(build, 'icon.png'));
 
 run('npm', ['ci', '--omit=dev', '--ignore-scripts', '--no-audit', '--no-fund'], build);
 

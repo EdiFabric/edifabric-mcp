@@ -17,6 +17,7 @@
   "homepage": "https://www.edifabric.com/docs/edifabric-native/introduction.html",
   "documentation": "https://github.com/EdiFabric/edifabric-mcp#readme",
   "support": "https://support.edifabric.com/hc/en-us/requests/new",
+  "icon": "icon.png",
   "server": {
     "type": "node",
     "entry_point": "src/index.js",

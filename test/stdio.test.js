@@ -32,6 +32,8 @@ test('starts over stdio and validates a file', async () => {
         const response = await client.callTool({ name: 'validate_edi', arguments: { input_path: '837p_error.txt' } });
 
         assert.equal(info.name, 'edifabric-mcp');
+        assert.equal(info.title, 'ediFabric EDI Toolkit');
+        assert.match(info.icons?.[0]?.src ?? '', /^https:\/\/.+\/icon\.png$/);
         assert.equal(tools.length, 7);
         assert.equal(JSON.parse(response.content[0].text).error_count, 1);
     } finally {

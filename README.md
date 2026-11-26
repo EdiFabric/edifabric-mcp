@@ -2,7 +2,7 @@
 
 An [MCP](https://modelcontextprotocol.io) server for EDI, currently X12 and HIPAA. It lets AI assistants such as Claude, Cursor and GitHub Copilot convert EDI to JSON and back, validate files, and generate 997 and 999 acknowledgments, using [ediFabric Native](https://www.edifabric.com/docs/edifabric-native/introduction.html) on your own machine.
 
-Your EDI files stay on your machine: the server reads and writes them locally, and returns summaries to the assistant rather than whole files.
+This repository is the local server, **ediFabric EDI Toolkit**: your EDI files stay on your machine, as the server reads and writes them locally and returns summaries to the assistant rather than whole files. The same tools also run as a remote server with nothing to install, **ediFabric EDI Toolkit Cloud**; see [Cloud server](#cloud-server-no-install). [Use with AI assistants](https://www.edifabric.com/docs/edifabric-native/mcp-server.html) compares the two.
 
 ## Tools
 
@@ -24,6 +24,19 @@ Try asking:
 - "Generate a 999 for every file in the inbound folder."
 - "Convert po.edi to JSON, change the quantity on line 2 to 12, and build it back to X12."
 - "What does an 856 in 004010 look like? Create a sample one."
+
+## Cloud server (no install)
+
+**ediFabric EDI Toolkit Cloud** runs the same tools as a remote MCP server, at `https://mcp.edifabric.com/mcp`, on the [ediFabric Cloud API](https://www.edifabric.com/docs/edifabric-cloud/introduction.html). Nothing to install: the assistant sends the EDI as text, up to 60,000 characters a call, and gets the results back, so it suits checking and explaining files rather than large batches. For files on disk, larger files, or EDI that must stay on your machine, install the local server below.
+
+- **Claude (claude.ai, Claude Desktop and mobile):** Settings, Connectors, **Add custom connector**, with the name *ediFabric EDI Toolkit Cloud* and the URL `https://mcp.edifabric.com/mcp`. Choose **Sign in now** and **Use Claude's published identity**, then sign in with your ediFabric account.
+- **Claude Code:** `claude mcp add --transport http edifabric-cloud https://mcp.edifabric.com/mcp`, then `/mcp`, **edifabric-cloud**, **Authenticate**, and sign in with your ediFabric account in the browser.
+- **Clients that take a header**, such as Cursor and VS Code, or Claude Code without signing in, can send your serial instead:
+  ```bash
+  claude mcp add --transport http edifabric-cloud https://mcp.edifabric.com/mcp --header "Ocp-Apim-Subscription-Key: YOUR_SERIAL"
+  ```
+
+When you sign in, the tools use one of your account's plans: Enterprise, Developer or Pay as you go first, then Enterprise Trial, then Community. With a serial, they use its plan; the demo serial works too. Tool calls count towards the plan's operations, as with the local server; `get_status` and `describe_spec` don't. Setup, data handling, limits and troubleshooting: [ediFabric EDI Toolkit Cloud](https://www.edifabric.com/docs/edifabric-native/mcp-server.html#cloud).
 
 ## Install
 

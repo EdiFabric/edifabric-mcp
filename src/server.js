@@ -13,8 +13,15 @@ const INSTRUCTIONS = `Tools for EDI files, currently X12 and HIPAA, run locally 
 - To answer a trading partner: acknowledge_edi (999 for HIPAA, 997 otherwise).
 Paths must be inside the allowed folders; get_status lists them.`;
 
+// The title and icon MCP clients show for the server. The Cloud server, at https://mcp.edifabric.com/mcp, is
+// "ediFabric EDI Toolkit Cloud". The icon is the plugin's, served from this repository.
+const TITLE = 'ediFabric EDI Toolkit';
+const ICON = 'https://raw.githubusercontent.com/EdiFabric/edifabric-mcp/main/.claude-plugin/icon.png';
+
 export function createServer(env = process.env) {
-    const server = new McpServer({ name: 'edifabric-mcp', version }, { instructions: INSTRUCTIONS });
+    const server = new McpServer(
+        { name: 'edifabric-mcp', title: TITLE, version, icons: [{ src: ICON, mimeType: 'image/png', sizes: ['1024x1024'] }] },
+        { instructions: INSTRUCTIONS });
     const folders = new AllowedFolders(env);
 
     // Use the folders the client shares, when it supports roots and none are set in EDIFABRIC_ALLOWED_DIRS.
