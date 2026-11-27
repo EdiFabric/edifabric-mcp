@@ -1,11 +1,14 @@
 {
   "name": "edifabric",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native. Your EDI files stay on your machine.",
   "mcpServers": {
     "edifabric": {
       "command": "npx",
-      "args": ["-y", "@edifabric/mcp"]
+      "args": [
+        "-y",
+        "@edifabric/mcp"
+      ]
     }
   }
 }
