@@ -29,7 +29,7 @@ Try asking:
 
 **ediFabric EDI Toolkit Cloud** runs the same tools as a remote MCP server, at `https://mcp.edifabric.com/mcp`, on the [ediFabric Cloud API](https://www.edifabric.com/docs/edifabric-cloud/introduction.html). Nothing to install: the assistant sends the EDI as text, up to 60,000 characters a call, and gets the results back, so it suits checking and explaining files rather than large batches. For files on disk, larger files, or EDI that must stay on your machine, install the local server below.
 
-- **Claude (claude.ai, Claude Desktop and mobile):** Settings, Connectors, **Add custom connector**, with the name *ediFabric EDI Toolkit Cloud* and the URL `https://mcp.edifabric.com/mcp`. Choose **Sign in now** and **Use Claude's published identity**, then sign in with your ediFabric account.
+- **Claude (claude.ai, Claude Desktop and mobile):** connect it from its listing in Claude's directory, [ediFabric EDI Toolkit Cloud](https://claude.ai/directory/connectors/edifabric-cloud), and sign in with your ediFabric account. Or add it yourself: on Claude's **Plugins** page, **Add**, **Add custom connector**, with the name *ediFabric EDI Toolkit Cloud* and the URL `https://mcp.edifabric.com/mcp`. Choose **Sign in now** and **Use Claude's published identity**, then sign in with your ediFabric account.
 - **Claude Code:** `claude mcp add --transport http edifabric-cloud https://mcp.edifabric.com/mcp`, then `/mcp`, **edifabric-cloud**, **Authenticate**, and sign in with your ediFabric account in the browser.
 - **Clients that take a header**, such as Cursor and VS Code, or Claude Code without signing in, can send your serial instead:
   ```bash

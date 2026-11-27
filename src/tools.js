@@ -126,8 +126,8 @@ export function registerTools(server, folders) {
 
     server.registerTool('build_edi', {
         title: 'Convert JSON to EDI',
-        description: 'Converts EDI JSON, as produced by parse_edi or written to match describe_spec, to an EDI file. '
-            + 'The segments are written as they are in the JSON, so include the trailer segments with the correct counts, and run validate_edi on the result.',
+        description: 'Converts EDI JSON, in the format parse_edi produces and describe_spec describes, to an EDI file. '
+            + 'The segments are written as they are in the JSON, including the trailer segments, whose counts must be correct. The result isn\'t validated.',
         inputSchema: {
             input_path: z.string().describe('The JSON file: one interchange or an array of them.'),
             output_path: z.string().describe('Where to save the EDI file.'),
@@ -178,7 +178,7 @@ export function registerTools(server, folders) {
         title: 'Describe a transaction',
         description: `Describes a transaction (${names}, including HIPAA) from the model parse_edi and build_edi use: a local or custom model `
             + 'in the map file, otherwise the standard model. The outline lists its loops and segments with the JSON property names. '
-            + 'Give segment for one segment\'s elements, types, lengths, codes and syntax rules. Set output to skeleton for JSON to fill in and pass to build_edi.',
+            + 'Give segment for one segment\'s elements, types, lengths, codes and syntax rules. Set output to skeleton for a JSON skeleton of the transaction, in the format build_edi converts.',
         inputSchema: {
             // Assistants sometimes send 850 or 004010 as numbers, so both are accepted.
             transaction: z.coerce.string().describe('The transaction, such as 850, 856, 837P, 837I or 835.'),
@@ -219,7 +219,7 @@ export function registerTools(server, folders) {
 
     server.registerTool('get_status', {
         title: 'Check the ediFabric setup',
-        description: 'Shows the license and how it\'s checked, where models come from and which folders the tools can use. Use it when a tool reports a setup problem.',
+        description: 'Shows the license and how it\'s checked, where models come from and which folders the tools can use.',
         inputSchema: {},
         annotations: { readOnlyHint: true, openWorldHint: false },
     }, handler(async () => ({
