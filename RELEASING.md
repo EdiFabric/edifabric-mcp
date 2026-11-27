@@ -10,9 +10,11 @@ The server's version lives in **`package.json`**. Everything else copies it:
 | `server.json` | The MCP Registry entry `com.edifabric/edifabric-mcp`: `version` and `packages[].version` |
 | `.claude-plugin/plugin.json` | The Claude Code plugin. Users get an update only when this version changes |
 | `mcpb/manifest.json` | The Claude Desktop bundle |
+| `.cursor-plugin/plugin.json` | The Cursor plugin |
+| `gemini-extension.json` | The Gemini CLI extension. Its gallery lists the versions that have a tag |
 | `CHANGELOG.md` | One `## <version>` entry per release |
 
-`npm version <x.y.z>` sets `package.json`, runs `scripts/sync-version.mjs` to copy the version into the other three files, and commits and tags the result as `v<x.y.z>`. `scripts/check-release.mjs` fails the release if any of them disagree, if the tag doesn't match, or if the changelog has no entry.
+`npm version <x.y.z>` sets `package.json`, runs `scripts/sync-version.mjs` to copy the version into the other files, and commits and tags the result as `v<x.y.z>`. `scripts/check-release.mjs` fails the release if any of them disagree, if the tag doesn't match, or if the changelog has no entry.
 
 The version is semantic and independent of ediFabric Native's (the `edifabric-x12` dependency):
 

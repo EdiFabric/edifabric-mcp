@@ -1,6 +1,14 @@
 # Changelog
 
-The version is set in `package.json`; `npm version` copies it into `server.json`, the Claude Code plugin and the Claude Desktop bundle. See [RELEASING.md](RELEASING.md).
+The version is set in `package.json`; `npm version` copies it into `server.json`, the Claude Code and Cursor plugins, the Claude Desktop bundle and the Gemini CLI extension. See [RELEASING.md](RELEASING.md).
+
+## 1.1.1
+
+- Uses `edifabric-x12` 1.2.3, which keeps ediFabric Native loaded until the process ends on Linux and macOS. Before, the library could be unloaded while Node shut down and its runtime threads still ran, which now and then crashed the process (SIGSEGV) after the work was done.
+- The descriptions of `build_edi`, `describe_spec` and `get_status` no longer tell the assistant which tool to call next; that guidance is in the server's instructions. Directories ask for tool descriptions without instructions about other tools.
+- A Cursor plugin (`.cursor-plugin/plugin.json` and `mcp.json`) and a Gemini CLI extension (`gemini-extension.json`), both running the server with `npx`. `npm version` keeps their versions in step.
+- Made-up sample files in `samples/`: 837P claims (valid, with an error, and a batch of two) and an 850 purchase order.
+- The README links the Cloud server's listing in Claude's directory, and says how to install the server in Gemini CLI.
 
 ## 1.1.0
 
