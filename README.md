@@ -65,6 +65,14 @@ claude mcp add edifabric -e EDIFABRIC_SERIAL=YOUR_SERIAL -- npx -y @edifabric/mc
 
 On Windows, outside WSL, run `npx` through `cmd`: `claude mcp add edifabric -e EDIFABRIC_SERIAL=YOUR_SERIAL -- cmd /c npx -y @edifabric/mcp`.
 
+### Gemini CLI
+
+```bash
+gemini extensions install https://github.com/EdiFabric/edifabric-mcp
+```
+
+It starts with the demo serial. To use your own, set `EDIFABRIC_SERIAL` in your environment before starting Gemini CLI.
+
 ### Claude Desktop
 
 Download `edifabric-mcp-<version>.mcpb` from the [latest release](https://github.com/EdiFabric/edifabric-mcp/releases/latest), then open it in Claude Desktop in one of these ways:

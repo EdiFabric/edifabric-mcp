@@ -1,4 +1,5 @@
-// Copies the version in package.json into server.json, the Claude Code plugin and the MCPB manifest.
+// Copies the version in package.json into server.json, the Claude Code and Cursor plugins, the MCPB manifest and the
+// Gemini CLI extension.
 // `npm version <x.y.z>` runs it through the "version" script, so the release commit carries them all.
 import { VERSIONED, readJson, writeJson } from './release-files.mjs';
 

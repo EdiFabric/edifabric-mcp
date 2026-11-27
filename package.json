@@ -18,7 +18,7 @@
     "test": "node --env-file-if-exists=.env.local --test \"test/*.test.js\"",
     "inspect": "npx @modelcontextprotocol/inspector node --env-file-if-exists=.env.local src/index.js",
     "sync-version": "node scripts/sync-version.mjs",
-    "version": "node scripts/sync-version.mjs && git add server.json .claude-plugin/plugin.json mcpb/manifest.json",
+    "version": "node scripts/sync-version.mjs && git add server.json .claude-plugin/plugin.json mcpb/manifest.json .cursor-plugin/plugin.json gemini-extension.json",
     "check-release": "node scripts/check-release.mjs",
     "build:mcpb": "node scripts/build-mcpb.mjs"
   },

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "edifabric": {
+      "command": "npx",
+      "args": ["-y", "@edifabric/mcp"]
+    }
+  }
+}

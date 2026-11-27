@@ -1,0 +1,17 @@
+{
+  "name": "edifabric",
+  "displayName": "ediFabric EDI Toolkit",
+  "version": "1.1.0",
+  "description": "Validate, parse, build and acknowledge X12 and HIPAA EDI files locally with ediFabric Native. Your EDI files stay on your machine.",
+  "author": {
+    "name": "EdiFabric",
+    "email": "support@edifabric.com",
+    "url": "https://www.edifabric.com"
+  },
+  "homepage": "https://www.edifabric.com/docs/edifabric-native/mcp-server.html#local",
+  "repository": "https://github.com/EdiFabric/edifabric-mcp",
+  "license": "MIT",
+  "keywords": ["edi", "x12", "hipaa", "837", "835", "850", "856", "999", "997", "validation"],
+  "logo": "./assets/icon.png",
+  "mcpServers": "./mcp.json"
+}

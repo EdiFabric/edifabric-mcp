@@ -26,4 +26,6 @@ export const VERSIONED = [
     },
     { file: '.claude-plugin/plugin.json', get: (json) => [json.version], set: (json, version) => { json.version = version; } },
     { file: 'mcpb/manifest.json', get: (json) => [json.version], set: (json, version) => { json.version = version; } },
+    { file: '.cursor-plugin/plugin.json', get: (json) => [json.version], set: (json, version) => { json.version = version; } },
+    { file: 'gemini-extension.json', get: (json) => [json.version], set: (json, version) => { json.version = version; } },
 ];
